@@ -1,0 +1,25 @@
+{
+  "name": "iot-project",
+  "version": "1.0.0",
+  "description": "testing iot project",
+  "main": "iot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reezq/iot-project.git"
+  },
+  "keywords": [
+    "iot"
+  ],
+  "author": "reezq",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reezq/iot-project/issues"
+  },
+  "homepage": "https://github.com/reezq/iot-project#readme",
+  "dependencies": {
+    "expressjs": "^1.0.1"
+  }
+}
