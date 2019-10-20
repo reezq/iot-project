@@ -1,0 +1,54 @@
+2019-10-18T01:25:07.524338549 0.002879s notice: Recursively removing directory /home/reezq/iot-project/rethinkdb_data/tmp
+2019-10-18T01:25:07.526099245 0.004643s notice: Initializing directory /home/reezq/iot-project/rethinkdb_data
+2019-10-18T01:25:07.526254762 0.004795s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/home/reezq/iot-project/rethinkdb_data' did not already exist or is empty.)
+2019-10-18T01:25:07.526286084 0.004826s notice: Running rethinkdb 2.3.7~0bionic (CLANG 6.0.0 (tags/RELEASE_600/final))...
+2019-10-18T01:25:07.528561228 0.007103s notice: Running on Linux 4.15.0-29-generic x86_64
+2019-10-18T01:25:07.528663838 0.007204s notice: Loading data from directory /home/reezq/iot-project/rethinkdb_data
+2019-10-18T01:25:07.540669615 0.019212s info: Automatically using cache size of 374 MB
+2019-10-18T01:25:07.541299172 0.019839s notice: Listening for intracluster connections on port 29015
+2019-10-18T01:25:07.543134946 0.021675s notice: Listening for client driver connections on port 28015
+2019-10-18T01:25:07.543393866 0.021934s notice: Listening for administrative HTTP connections on port 8080
+2019-10-18T01:25:07.543399403 0.021939s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2019-10-18T01:25:07.543406304 0.021946s notice: Listening on driver addresses: 127.0.0.1, ::1
+2019-10-18T01:25:07.543409241 0.021949s notice: Listening on http addresses: 127.0.0.1, ::1
+2019-10-18T01:25:07.543415854 0.021956s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2019-10-18T01:25:07.543422515 0.021963s notice: Server ready, "dev_iot_xmw" 08fa636d-25b5-4720-a867-5dfb389d03f0
+2019-10-18T01:25:19.035771325 11.514312s notice: Server got SIGINT from pid 0, uid 0; shutting down...
+2019-10-18T01:25:19.035852300 11.514392s notice: Shutting down client connections...
+2019-10-18T01:25:19.036014672 11.514555s notice: All client connections closed.
+2019-10-18T01:25:19.036019261 11.514559s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2019-10-18T01:25:19.036257107 11.514797s notice: Storage engine shut down.
+2019-10-18T01:26:11.863933620 0.004182s notice: Running rethinkdb 2.3.7~0bionic (CLANG 6.0.0 (tags/RELEASE_600/final))...
+2019-10-18T01:26:11.866463402 0.006711s notice: Running on Linux 4.15.0-29-generic x86_64
+2019-10-18T01:26:11.866629632 0.006875s notice: Loading data from directory /home/reezq/iot-project/rethinkdb_data
+2019-10-18T01:26:11.873657635 0.013905s info: Automatically using cache size of 374 MB
+2019-10-18T01:26:11.874347658 0.014593s notice: Listening for intracluster connections on port 29015
+2019-10-18T01:26:11.876327777 0.016573s notice: Listening for client driver connections on port 28015
+2019-10-18T01:26:11.876624997 0.016870s notice: Listening for administrative HTTP connections on port 8080
+2019-10-18T01:26:11.876630446 0.016876s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2019-10-18T01:26:11.876637338 0.016882s notice: Listening on driver addresses: 127.0.0.1, ::1
+2019-10-18T01:26:11.876640473 0.016886s notice: Listening on http addresses: 127.0.0.1, ::1
+2019-10-18T01:26:11.876646926 0.016892s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2019-10-18T01:26:11.876653390 0.016898s notice: Server ready, "dev_iot_xmw" 08fa636d-25b5-4720-a867-5dfb389d03f0
+2019-10-18T01:26:30.109742326 18.249988s notice: Server got SIGINT from pid 0, uid 0; shutting down...
+2019-10-18T01:26:30.109970096 18.250215s notice: Shutting down client connections...
+2019-10-18T01:26:30.110114787 18.250360s notice: All client connections closed.
+2019-10-18T01:26:30.110156594 18.250402s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2019-10-18T01:26:30.110598458 18.250844s notice: Storage engine shut down.
+2019-10-18T01:35:00.899851400 0.003753s notice: Running rethinkdb 2.3.7~0bionic (CLANG 6.0.0 (tags/RELEASE_600/final))...
+2019-10-18T01:35:00.902358616 0.006260s notice: Running on Linux 4.15.0-29-generic x86_64
+2019-10-18T01:35:00.902520043 0.006419s notice: Loading data from directory /home/reezq/iot-project/rethinkdb_data
+2019-10-18T01:35:00.909068996 0.012970s info: Automatically using cache size of 374 MB
+2019-10-18T01:35:00.909725173 0.013624s notice: Listening for intracluster connections on port 29015
+2019-10-18T01:35:00.911513768 0.015412s notice: Listening for client driver connections on port 28015
+2019-10-18T01:35:00.911779043 0.015678s notice: Listening for administrative HTTP connections on port 8080
+2019-10-18T01:35:00.911784531 0.015683s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2019-10-18T01:35:00.911791659 0.015690s notice: Listening on driver addresses: 127.0.0.1, ::1
+2019-10-18T01:35:00.911794933 0.015693s notice: Listening on http addresses: 127.0.0.1, ::1
+2019-10-18T01:35:00.911801569 0.015700s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2019-10-18T01:35:00.911808287 0.015707s notice: Server ready, "dev_iot_xmw" 08fa636d-25b5-4720-a867-5dfb389d03f0
+2019-10-18T01:35:11.018260927 10.122160s notice: Server got SIGINT from pid 0, uid 0; shutting down...
+2019-10-18T01:35:11.018337671 10.122236s notice: Shutting down client connections...
+2019-10-18T01:35:11.018550908 10.122450s notice: All client connections closed.
+2019-10-18T01:35:11.018555685 10.122454s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2019-10-18T01:35:11.018804876 10.122704s notice: Storage engine shut down.
