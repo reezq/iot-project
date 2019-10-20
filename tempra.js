@@ -56,28 +56,6 @@ var feed = io.of('/feed');
 
 //}
 
-io.on('connection', function(socket){
-  var address = socket.handshake.address;
-  console.log('Socket client connected.',socket.client.request.connection.remoteAddress);
-  socket.on('disconnect', function(){
-    console.log('user disconnected',socket.client.request.connection.remoteAddress);
-  });
-  socket.on('chat message', function(msg){
-      console.log('message: ' + msg);
-      if(msg=="hidup"){
-        var pesan = "hidup";
-        io.emit('audio message', pesan);
-        console.log('isi message: on');
-        }
-      else if(msg=="mati"){
-      var pesan = "mati";
-      io.emit('audio message', pesan);
-      console.log('isi message: off');
-    }
-      else{console.log('isi message: bukan on');}
-    });
-})
-//testing arduino; abaikan krn bukan project audiopaging
 app.route('/temphumi')
 .get(function(req,res, next){
     var sense_value = req.body;
