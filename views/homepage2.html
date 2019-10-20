@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - Semantic</title>
+  <title>Home - Tempramas</title>
   <link rel="stylesheet" type="text/css" href="/css/semantic.css">
   <link rel="stylesheet" type="text/css" href="/css/icon.min.css">
   <style type="text/css">
@@ -15,7 +15,11 @@
     .hidden.menu {
       display: none;
     }
-
+    /* membuat background */
+    .landing-image {
+        background-image: url('/image/bg2.jpg') !important;
+        background-size: cover !important;
+    }
     .masthead.segment {
       min-height: 700px;
       padding: 1em 0em;
@@ -132,9 +136,194 @@
 
   <script src="/js/jquery-3.2.1.min.js"></script>
   <script src="/js/semantic.min.js"></script>
+  <script src="/js/Chart.bundle.min.js"></script>
+  <script src="/js/socket.io.js"></script>
   <script>
   $(document)
     .ready(function() {
+      $('.anim')
+      .transition('set looping')
+      .transition('fade In', '700ms')
+      ;
+
+      // start chart js
+      var ctxTemp9 = document.getElementById("chart-suhu9");
+      var ctxHumi9 = document.getElementById("chart-kelembapan9");
+      var ctxTemp556 = document.getElementById("chart-suhu556");
+      var ctxHumi556 = document.getElementById("chart-kelembapan556");
+      var datas = {
+        temp9 : ["17","18","19","20","20","20","21"],
+        humi9 : ["55","55","55","56","56","57","50"],
+        temp556 : ["17","18","19","20","20","20","21"],
+        humi556 : ["55","55","55","56","56","57","50"],
+        label : ["15:17","15:18","15:19","15:20","15:21","15:22","15:41"]
+      }
+      applyData({
+       temp : [
+         "50",
+         "12:00"
+       ],
+       humi : [
+         "90",
+         "12:00"
+       ]
+      })
+      var chartTemp9, chartHumi9, chartTemp556, chartHumi556;
+      function transparentize(color, opacity) {
+          var alpha = opacity === undefined? 0.5 : 1 - opacity;
+          return Chart.helpers.color(color).alpha(alpha).rgbString();
+      }
+      var socket = io('http://192.168.197.84:84/feed');
+      socket.on('update', function (data) {
+      console.log(data);
+
+      if (data.tA != undefined) {
+
+        removeData(chartTemp9);
+        addData(chartTemp9, "15:51", data.tA);
+
+
+        $('#suhu9skr').html(data.tA+'&nbsp<sup>o</sup>Celc');
+        $('.9').dimmer('set disabled');
+        $('.9.dimmer').hide();
+        // if (data.t > maxTemp) {
+        //   maxTemp = data.t;
+        //   $('#temperature .maximum').text(data.t);
+        //   $('#temperature .timem').text(parseTime(false, 'hm'));
+        // }
+      }
+
+      if (data.hA != undefined) {
+
+        removeData(chartHumi9);
+        addData(chartHumi9, "15:51", data.hA);
+
+        $('#kelembapan9skr').html(data.hA+'&nbsp%RH');
+        // if (data.h > maxHumi) {
+        //   maxHumi = data.h;
+        //   $('#humidity .maximum').text(data.h);
+        //   $('#humidity .timem').text(parseTime(false, 'hm'));
+        // }
+      }
+
+      if (data.tB != undefined) {
+
+        removeData(chartTemp556);
+        addData(chartTemp556, "15:51", data.tB);
+
+
+        $('#suhu556skr').html(data.tB+'&nbsp<sup>o</sup>Celc');
+        $('.556').dimmer('set disabled');
+        $('.556.dimmer').hide();
+        // if (data.t > maxTemp) {
+        //   maxTemp = data.t;
+        //   $('#temperature .maximum').text(data.t);
+        //   $('#temperature .timem').text(parseTime(false, 'hm'));
+        // }
+      }
+
+      if (data.hB != undefined) {
+
+        removeData(chartHumi556);
+        addData(chartHumi556, "15:51", data.hB);
+
+        $('#kelembapan556skr').html(data.hB+'&nbsp%RH');
+        // if (data.h > maxHumi) {
+        //   maxHumi = data.h;
+        //   $('#humidity .maximum').text(data.h);
+        //   $('#humidity .timem').text(parseTime(false, 'hm'));
+        // }
+      }
+
+      });
+      function chrConfig(labels, label, labelstr, data, smin, smax, step){
+        return {
+          type: 'line',
+          data: {
+            labels : labels,
+            datasets: [{
+              label: label,
+              fill: 'origin',
+              borderWidth: 2,
+              backgroundColor: false,
+              pointRadius: 2,
+              borderColor: "#000000",
+              // lineTension: 0,
+              data: data
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            tooltips: {
+              mode: 'index',
+              intersect: false,
+            },
+            hover: {
+              mode: 'nearest',
+              intersect: true
+            },
+            scales: {
+              xAxes: [{
+                display: false
+              }],
+              yAxes: [{
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: labelstr,
+                  fontColor: '#000000',
+                  fontSize: 11
+                },
+                ticks: {
+                  suggestedMin: smin,
+                  suggestedMax: smax,
+                  stepSize: step,
+                  fontColor: '#000000',
+                  fontSize: 11
+                },
+                gridLines: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                }
+              }]
+            },
+            legend: {
+              display: false
+            }
+          }
+        }
+      }
+      function applyData(data){
+        maxTemp = data.temp[0];
+        $('#suhu9').html(data.temp[0]+'&nbsp<sup>o</sup>Celc');
+        $('#suhu556').html(data.temp[0]+'&nbsp<sup>o</sup>Celc');
+        maxHumi = data.humi[0];
+        $('#kelembapan9').html(data.humi[0]+'&nbsp%RH');
+        $('#kelembapan556').html(data.humi[0]+'&nbsp%RH');
+
+        chartTemp9 = new Chart(ctxTemp9, chrConfig(datas.label, 'Suhu', '', datas.temp9, 15, 10, 5));
+        chartHumi9 = new Chart(ctxHumi9, chrConfig(datas.label, 'Kelembapan', '', datas.humi9, 15, 10, 50));
+        chartTemp556 = new Chart(ctxTemp556, chrConfig(datas.label, 'Suhu', '', datas.temp556, 15, 10, 5));
+        chartHumi556 = new Chart(ctxHumi556, chrConfig(datas.label, 'Kelembapan', '', datas.humi556, 15, 10, 50));
+
+      }
+
+      function addData(chart, label, data) {
+        chart.data.labels.push(label);
+        chart.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+        });
+        chart.update();
+
+      }
+
+      function removeData(chart) {
+        chart.data.labels.splice(0,1);
+        chart.data.datasets.forEach((dataset) => {
+          dataset.data.splice(0,1);
+        });
+        chart.update();
+      }
 
       // fix menu when passed
       $('.masthead')
@@ -148,11 +337,79 @@
           }
         })
       ;
+      // membuat dimmer
+      $('.9').dimmer('set active');
+      $('.556').dimmer('set active');
+      $('.762').dimmer('set active');
+      $('.127').dimmer('set active');
+      // membuat modal
+      $('.ui.link a.item:contains("Sitemap")')
+        .on('click', function() {
+              $('.ui.basic.modal.sitem')
+              .modal('show');
+            });
+      $('.ui.link a.item:contains("Contact Us")')
+        .on('click', function() {
+              $('.ui.basic.modal.conta')
+              .modal('show');
+            });
+      $('.ui.link a.item:contains("Versions")')
+        .on('click', function() {
+              $('.ui.basic.modal.vers')
+              .modal('show');
+            });
+      $('.ui.link a.item:contains("Next Project")')
+        .on('click', function() {
+              $('.ui.basic.modal.nextp')
+              .modal('show');
+            });
+      // membuat menu active
+      $('.ui.menu a.item')
+        .on('click', function() {
+          var nilaimenu = $(this).text();
+          switch (nilaimenu) {
+              case "9":
+                $('.ui.menu a.item:contains("9")')
+                  .addClass('active')
+                  .siblings()
+                  .removeClass('active');
+                $('.item a.ui.button')
+                  .removeClass('olive teal yellow green')
+                  .addClass('olive');
+                  break;
+              case "5.56":
+                  $('.ui.menu a.item:contains("5.56")')
+                    .addClass('active')
+                    .siblings()
+                    .removeClass('active');
+                  $('.item a.ui.button')
+                    .removeClass('olive teal yellow green')
+                    .addClass('teal');
+                  break;
+              case "7.62":
+                  $('.ui.menu a.item:contains("7.62")')
+                    .addClass('active')
+                    .siblings()
+                    .removeClass('active');
+                  $('.item a.ui.button')
+                    .removeClass('olive teal yellow green')
+                    .addClass('yellow');
+                  break;
+              case "12.7":
+                  $('.ui.menu a.item:contains("12.7")')
+                    .addClass('active')
+                    .siblings()
+                    .removeClass('active');
+                  $('.item a.ui.button')
+                    .removeClass('olive teal yellow green')
+                    .addClass('green');
+                  break;
+              }
+        })
+      ;
 
       // create sidebar and attach to menu open
-      $('.ui.sidebar')
-        .sidebar('attach events', '.toc.item')
-      ;
+      $('.ui.sidebar').sidebar('attach events', '.toc.item');
 
     })
   ;
@@ -161,18 +418,18 @@
 <body>
 
 <!-- Following Menu -->
-<div class="ui large top fixed hidden menu">
+<div class="ui small inverted top fixed hidden menu">
   <div class="ui container">
-    <a class="active item">9</a>
-    <a class="item">5.56</a>
-    <a class="item">7.62</a>
-    <a class="item">12.7</a>
+    <a class="item" href=#9>9</a>
+    <a class="item" href=#5.56>5.56</a>
+    <a class="item" href=#7.62>7.62</a>
+    <a class="item" href=#12.7>12.7</a>
     <div class="right menu">
       <div class="item">
-        <a class="ui button">Log in</a>
+        <a class="ui button">Data History</a>
       </div>
       <div class="item">
-        <a class="ui primary button">Sign Up</a>
+        <a class="ui button">Admin</a>
       </div>
     </div>
   </div>
@@ -180,157 +437,320 @@
 
 <!-- Sidebar Menu -->
 <div class="ui vertical inverted sidebar menu">
-  <a class="active item">9</a>
-  <a class="item">5.56</a>
-  <a class="item">7.62</a>
-  <a class="item">12.7</a>
+  <a class="item" href=#9>9</a>
+  <a class="item" href=#5.56>5.56</a>
+  <a class="item" href=#7.62>7.62</a>
+  <a class="item" href=#12.7>12.7</a>
 </div>
 
 
 <!-- Page Contents -->
 <div class="pusher">
-  <div class="ui inverted vertical masthead center aligned segment">
-
+  <div class="ui landing-image inverted vertical masthead center aligned segment">
     <div class="ui container">
       <div class="ui small secondary inverted pointing menu">
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="active item">9</a>
-        <a class="item">5.56</a>
-        <a class="item">7.62</a>
-        <a class="item">12.7</a>
+        <a class="item" href=#9>9</a>
+        <a class="item" href=#5.56>5.56</a>
+        <a class="item" href=#7.62>7.62</a>
+        <a class="item" href=#12.7>12.7</a>
         <div class="right item">
-          <a class="ui inverted button">Log in</a>
-          <a class="ui inverted button">Sign Up</a>
+          <a class="ui inverted button">Data History</a>
+          <a class="ui inverted button">Admin</a>
         </div>
       </div>
     </div>
 
     <div class="ui text container">
       <h1 class="ui inverted header">
-        Imagine-a-Company
+        TEMPRAMAS
       </h1>
-      <h2>Do whatever you want when you want to.</h2>
-      <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div>
+      <h2 class="ui inverted header">Dapatkan info suhu dan kelembapan lebih cepat</h2>
+      <div class="ui huge primary button">Memulai <i class="right arrow icon"></i></div>
     </div>
 
   </div>
-  <div class="ui inverted yellow vertical masthead2 center aligned segment">
-    
-      <div class="ui small secondary inverted pointing menu">
-          <a class="toc item">
-          <i class="sidebar icon"></i>
-          </a>
-      </div>
-
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        Imagine-a-Company
-      </h1>
-      <h2>Do whatever you want when you want to.</h2>
-      <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div>
+  <div class="ui olive inverted vertical masthead2 center aligned segment 9" id="9">
+    <div class="ui dimmer 9">
+    <div class="ui indeterminate text loader">Menyiapkan Berkas</div>
     </div>
-
-  </div>
-
-  <div class="ui inverted vertical masthead2 center aligned segment">
-
     <div class="ui container">
-      <div class="ui large secondary inverted pointing menu">
-        <a class="toc item">
-          <i class="sidebar icon"></i>
-        </a>
+      <div class="ui small inverted olive pointing menu">
+      </div>
+    </div>
+    <div class="ui container">
+      <div class="ui small inverted olive pointing menu">
       </div>
     </div>
     <div class="ui text container">
-      <h1 class="ui inverted header">
-        Imagine-a-Company
-      </h1>
-      <h2>Do whatever you want when you want to.</h2>
-      <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div>
-    </div>
-
-  </div>
-
-  <div class="ui vertical stripe segment">
-    <div class="ui middle aligned stackable grid container">
-      <div class="row">
-        <div class="eight wide column">
-          <h3 class="ui header">We Help Companies and Companions</h3>
-          <p>We can give your company superpowers to do things that they never thought possible. Let us delight your customers and empower your needs...through pure data analytics.</p>
-          <h3 class="ui header">We Make Bananas That Can Dance</h3>
-          <p>Yes that's right, you thought it was the stuff of dreams, but even bananas can be bioengineered.</p>
-        </div>
-        <div class="six wide right floated column">
-          <img src="assets/images/wireframe/white-image.png" class="ui large bordered rounded image">
+      <div class="ui equal width stackable divided grid">
+        <div class="center aligned row">
+          <div class="column">
+            <h3 style="color:black;">Suhu Tertinggi Hari Ini</h3>
+            <h1 style="color:black;"  id="suhu9"><sup>o</sup>Celc</h1>
+          </div>
+          <div class="column">
+            <h3 style="color:black;">Suhu Saat Ini</h3>
+            <h1 style="color:black;" class="anim" id="suhu9skr"></h1>
+          </div>
+          </div>
+          <div class="center aligned row">
+          <div class="column">
+            <canvas id="chart-suhu9"></canvas>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="center aligned column">
-          <a class="ui huge button">Check Them Out</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="ui vertical stripe quote segment">
-    <div class="ui equal width stackable internally celled grid">
-      <div class="center aligned row">
-        <div class="column">
-          <h3>"What a Company"</h3>
-          <p>That is what they all say about us</p>
-        </div>
-        <div class="column">
-          <h3>"I shouldn't have gone with their competitor."</h3>
-          <p>
-            <img src="assets/images/avatar/nan.jpg" class="ui avatar image"> <b>Nan</b> Chief Fun Officer Acme Toys
-          </p>
+      <div class="ui equal width stackable divided grid">
+        <div class="center aligned row">
+          <div class="column">
+            <h3 style="color:black;">Kelembapan Tertinggi Hari Ini</h3>
+            <h1 style="color:black;" id="kelembapan9">%RH</h1>
+          </div>
+          <div class="column">
+            <h3 style="color:black;">Kelembapan Saat Ini</h3>
+            <h1 style="color:black;" class="anim" id="kelembapan9skr"></h1>
+          </div>
+          </div>
+          <div class="center aligned row">
+          <div class="column">
+            <canvas id="chart-kelembapan9"></canvas>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="ui vertical stripe segment">
+  <div class="ui teal inverted vertical masthead2 center aligned segment 556" id="5.56">
+    <div class="ui dimmer 556">
+    <div class="ui indeterminate text loader">Menyiapkan Berkas</div>
+    </div>
+    <div class="ui container">
+      <div class="ui small inverted teal pointing menu">
+      </div>
+    </div>
+    <div class="ui container">
+      <div class="ui small inverted teal pointing menu">
+      </div>
+    </div>
     <div class="ui text container">
-      <h3 class="ui header">Breaking The Grid, Grabs Your Attention</h3>
-      <p>Instead of focusing on content creation and hard work, we have learned how to master the art of doing nothing by providing massive amounts of whitespace and generic content that can seem massive, monolithic and worth your attention.</p>
-      <a class="ui large button">Read More</a>
-      <h4 class="ui horizontal header divider">
-        <a href="#">Case Studies</a>
-      </h4>
-      <h3 class="ui header">Did We Tell You About Our Bananas?</h3>
-      <p>Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but its really true. It took years of gene splicing and combinatory DNA research, but our bananas can really dance.</p>
-      <a class="ui large button">I'm Still Quite Interested</a>
+      <div class="ui equal width stackable divided grid">
+        <div class="center aligned row">
+          <div class="column">
+            <h3 style="color:black;">Suhu Tertinggi Hari Ini</h3>
+            <h1 style="color:black;"  id="suhu556"><sup>o</sup>Celc</h1>
+          </div>
+          <div class="column">
+            <h3 style="color:black;">Suhu Saat Ini</h3>
+            <h1 style="color:black;" class="anim" id="suhu556skr"></h1>
+          </div>
+          </div>
+          <div class="center aligned row">
+          <div class="column">
+            <canvas id="chart-suhu556"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="ui equal width stackable divided grid">
+        <div class="center aligned row">
+          <div class="column">
+            <h3 style="color:black;">Kelembapan Tertinggi Hari Ini</h3>
+            <h1 style="color:black;" id="kelembapan556">%RH</h1>
+          </div>
+          <div class="column">
+            <h3 style="color:black;">Kelembapan Saat Ini</h3>
+            <h1 style="color:black;" class="anim" id="kelembapan556skr"></h1>
+          </div>
+          </div>
+          <div class="center aligned row">
+          <div class="column">
+            <canvas id="chart-kelembapan556"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <div class="ui yellow inverted vertical masthead2 center aligned segment 762" id="7.62">
+    <div class="ui dimmer 762">
+    <div class="ui indeterminate text loader">Sensor Belum Terpasang</div>
+    </div>
+    <div class="ui container">
+      <div class="ui small inverted yellow pointing menu">
+      </div>
+    </div>
+    <div class="ui container">
+      <div class="ui small inverted yellow pointing menu">
+      </div>
+    </div>
+    <div class="ui text container">
+      <div class="ui equal width stackable divided grid">
+        <div class="center aligned row">
+          <div class="column">
+            <h3 style="color:black;">Suhu Tertinggi Hari Ini</h3>
+            <h1 style="color:black;"  id="suhu762"><sup>o</sup>Celc</h1>
+          </div>
+          <div class="column">
+            <h3 style="color:black;">Suhu Saat Ini</h3>
+            <h1 style="color:black;" class="anim" id="suhu762skr"></h1>
+          </div>
+          </div>
+          <div class="center aligned row">
+          <div class="column">
+            <canvas id="chart-suhu762"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="ui equal width stackable divided grid">
+        <div class="center aligned row">
+          <div class="column">
+            <h3 style="color:black;">Kelembapan Tertinggi Hari Ini</h3>
+            <h1 style="color:black;" id="kelembapan762">%RH</h1>
+          </div>
+          <div class="column">
+            <h3 style="color:black;">Kelembapan Saat Ini</h3>
+            <h1 style="color:black;" class="anim" id="kelembapan762skr"></h1>
+          </div>
+          </div>
+          <div class="center aligned row">
+          <div class="column">
+            <canvas id="chart-kelembapan762"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui green inverted vertical masthead2 center aligned segment 127" id="12.7">
+    <div class="ui dimmer 127">
+    <div class="ui indeterminate text loader">Sensor Belum Terpasang</div>
+    </div>
+    <div class="ui container">
+      <div class="ui small inverted green pointing menu">
+      </div>
+    </div>
+    <div class="ui container">
+      <div class="ui small inverted green pointing menu">
+      </div>
+    </div>
+    <div class="ui text container">
+      <div class="ui equal width stackable divided grid">
+        <div class="center aligned row">
+          <div class="column">
+            <h3 style="color:black;">Suhu Tertinggi Hari Ini</h3>
+            <h1 style="color:black;"  id="suhu127"><sup>o</sup>Celc</h1>
+          </div>
+          <div class="column">
+            <h3 style="color:black;">Suhu Saat Ini</h3>
+            <h1 style="color:black;" class="anim" id="suhu127skr"></h1>
+          </div>
+          </div>
+          <div class="center aligned row">
+          <div class="column">
+            <canvas id="chart-suhu127"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="ui equal width stackable divided grid">
+        <div class="center aligned row">
+          <div class="column">
+            <h3 style="color:black;">Kelembapan Tertinggi Hari Ini</h3>
+            <h1 style="color:black;" id="kelembapan127">%RH</h1>
+          </div>
+          <div class="column">
+            <h3 style="color:black;">Kelembapan Saat Ini</h3>
+            <h1 style="color:black;" class="anim" id="kelembapan127skr"></h1>
+          </div>
+          </div>
+          <div class="center aligned row">
+          <div class="column">
+            <canvas id="chart-kelembapan127"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="ui inverted vertical footer segment">
+    <div class="ui basic modal conta">
+      <div class="ui icon header">
+        <i class="green user secret icon"></i>
+        Sub Departemen Teknologi Informasi & Komunikasi (TIK)
+      </div>
+      <div class="content">
+        <p><i class="phone icon"></i>6351</p>
+        <p><i class="mail icon"></i>rizky@pindad.com</p>
+      </div>
+      <div class="actions aligned center">
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon"></i>OK
+        </div>
+      </div>
+    </div>
+    <div class="ui basic modal vers">
+      <div class="ui green icon header">
+        <i class="green snowflake outline loading icon"></i>
+        Versions 1.0.0 (Stable)
+      </div>
+      <div class="actions">
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon"></i>OK
+        </div>
+      </div>
+    </div>
+    <div class="ui basic modal nextp">
+      <div class="ui green icon header">
+        <i class="green bullhorn icon"></i>
+        Coming soon...
+      </div>
+      <div class="actions">
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon"></i>OK
+        </div>
+      </div>
+    </div>
+    <div class="ui basic modal sitem">
+      <div class="ui icon header">
+        <i class="green microphone icon"></i>
+      </div>
+      <div class="content">
+        <p><i class="calendar outline icon"></i>9mm</p>
+        <p><i class="calendar outline icon"></i>5.56mm</p>
+        <p><i class="calendar outline icon"></i>7.62mm</p>
+        <p><i class="calendar outline icon"></i>12.7mm</p>
+        <p><i class="chart bar icon"></i>Data history</p>
+        <p><i class="address card outline icon"></i>administrator</p>
+      </div>
+      <div class="actions">
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon"></i>OK
+        </div>
+      </div>
+    </div>
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
         <div class="three wide column">
           <h4 class="ui inverted header">About</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Sitemap</a>
             <a href="#" class="item">Contact Us</a>
-            <a href="#" class="item">Religious Ceremonies</a>
-            <a href="#" class="item">Gazebo Plans</a>
+            <a href="#" class="item">Versions</a>
+            <a href="#" class="item">Next Project</a>
           </div>
         </div>
         <div class="three wide column">
-          <h4 class="ui inverted header">Services</h4>
+          <h4 class="ui inverted header">Navigation</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Banana Pre-Order</a>
-            <a href="#" class="item">DNA FAQ</a>
-            <a href="#" class="item">How To Access</a>
-            <a href="#" class="item">Favorite X-Men</a>
+            <a href="#" class="item">Sitemap</a>
+            <a href="#" class="item">History Data</a>
+            <a href="#" class="item">Best Views</a>
+            <a href="#" class="item">Minimal Requirements</a>
           </div>
         </div>
         <div class="seven wide column">
-          <h4 class="ui inverted header">Footer Header</h4>
-          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+          <h1 class="ui inverted header">TEMPRAMAS</h1>
+          <p>Adalah aplikasi yang bekerja untuk membagikan informasi suhu dan kelembapan ruang di Hall U.
+            Dilengkapi juga dengan fitur untuk bisa melihat <a href="#" class="item">riwayat</a> data suhu dan kelembapan.</p>
         </div>
       </div>
     </div>
